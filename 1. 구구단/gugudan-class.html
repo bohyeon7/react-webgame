@@ -1,0 +1,70 @@
+<html>
+<head>
+</head>
+<body>
+<div id="root"></div>
+<!-- 개발용 -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<!-- 배포용 -->
+<!--<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>-->
+<!--<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>-->
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+  'use strict';
+
+  class GuGuDan extends React.Component {
+    constructor(props) {
+      super(props);
+      // 변할것들은 state로 생성
+      this.state={
+        first: Math.ceil(Math.random() * 9),
+        second: Math.ceil(Math.random() * 9),
+        value: '',
+        result: ''
+      }
+    }
+
+    onSubmit = (e) => {
+      e.preventDefault();
+      if (parseInt(this.state.value) === this.state.first * this.state.second) {
+        this.setState({
+          first: Math.ceil(Math.random() * 9),
+          second: Math.ceil(Math.random() * 9),
+          value: '',
+          result: '정답!'
+        })
+      } else {
+        this.setState({
+          value: '',
+          result: '땡!'
+        })
+      }
+    }
+
+    onChange = (e) => {
+      this.setState({
+        value: e.target.value
+      })
+    }
+
+    render() {
+      // 태그안에 js 넣을때는 중괄호로 묶기
+      return (
+        <div>
+          <div>{this.state.first} 곱하기 {this.state.second} 는?</div>
+          <form onSubmit={this.onSubmit}>
+            <input type="number" value={this.state.value} onChange={this.onChange} />
+            <button>입력!</button>
+          </form>
+          <div>{this.state.result}</div>
+        </div>
+      );
+    }
+  }
+</script>
+<script type="text/babel">
+  ReactDOM.createRoot(document.querySelector('#root')).render(<div><GuGuDan /></div>);
+</script>
+</body>
+</html>
