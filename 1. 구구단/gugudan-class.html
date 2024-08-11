@@ -42,6 +42,7 @@
           result: '땡!'
         })
       }
+      this.input.focus();
     }
 
     onChange = (e) => {
@@ -50,13 +51,18 @@
       })
     }
 
+    input;
+    onRefInput = (c) => {
+      this.input = c;
+    }
+
     render() {
       // 태그안에 js 넣을때는 중괄호로 묶기
       return (
         <div>
           <div>{this.state.first} 곱하기 {this.state.second} 는?</div>
           <form onSubmit={this.onSubmit}>
-            <input type="number" value={this.state.value} onChange={this.onChange} />
+            <input ref={this.onRefInput} type="number" value={this.state.value} onChange={this.onChange} />
             <button>입력!</button>
           </form>
           <div>{this.state.result}</div>
