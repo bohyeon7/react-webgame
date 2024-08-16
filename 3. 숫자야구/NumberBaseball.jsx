@@ -18,7 +18,7 @@ const getNumbers = () => {
 const NumberBaseball = () => {
   const [result, setResult] = useState('');
   const [value, setValue] = useState('');
-  const [answer, setAnswer] = useState(getNumbers);
+  const [answer, setAnswer] = useState(getNumbers); // lazy init
   const [tries, setTries] = useState([]); // push 쓰면 안됨 (불변성)
   const inputRef = useRef(null);
 
@@ -27,7 +27,7 @@ const NumberBaseball = () => {
     if (value === answer.join('')) {
       setResult('홈런');
       setValue('');
-      setAnswer(getNumbers);
+      setAnswer(getNumbers());
       setTries([]);
       alert('게임을 다시 시작합니다!');
     } else {
@@ -38,7 +38,7 @@ const NumberBaseball = () => {
       if (tries.length >= 9) {
         setResult(`10번 넘게 틀려서 실패! 답은 ${answer.join('')}였습니다`);
         setValue('');
-        setAnswer(getNumbers);
+        setAnswer(getNumbers());
         setTries([]);
         alert('게임을 다시 시작합니다!');
       } else {
@@ -49,7 +49,7 @@ const NumberBaseball = () => {
             ball++;
           }
         }
-        setTries([...tries, {try: value, result: `${strike} 스트라이크, ${ball} 볼 입니다`}]);
+        setTries((prevTries) => [...prevTries, {try: value, result: `${strike} 스트라이크, ${ball} 볼 입니다`}]);
         setValue('');
       }
     }
