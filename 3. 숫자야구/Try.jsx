@@ -1,11 +1,15 @@
 const React = require('react');
-const { useState, useRef } = React;
+const { useState, useRef, memo } = React;
 
-const Try = ({value, index}) => (
-  <li>
-    <div>{value.try}</div>
-    <div>{value.result}</div>
-  </li>
-)
+const Try = memo(({value, index}) => {
 
+  return <>
+    <li>
+      <div>{value.try}</div>
+      <div>{value.result}</div>
+    </li>
+  </>
+});
+
+Try.displayName = 'Try';
 module.exports = Try;
