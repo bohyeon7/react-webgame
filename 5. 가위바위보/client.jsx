@@ -1,6 +1,6 @@
-const React = require('react');
-const ReactDom = require('react-dom/client');
+import React from 'react';
+import ReactDom from 'react-dom/client';
 
-const RSP = require('./RSP');
+import RSP from './RSP';
 
 ReactDom.createRoot(document.querySelector('#root')).render(<RSP />);

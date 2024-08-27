@@ -1,5 +1,6 @@
-const React = require('react');
-const { useState, useRef, useEffect } = React;
+import React from "react";
+import { useState, useRef, useEffect } from "react";
+import useInterval from './useInterval';
 
 const rspCoords = {
   바위: '0',
@@ -17,15 +18,7 @@ const RSP = () => {
   const [result, setResult] = useState('');
   const [imgCoord, setImgCoord] = useState(rspCoords.바위);
   const [score, setScore] = useState(0);
-  const interval = useRef(null);
-
-  useEffect(() => { // componentDidMount, componentDidUpdate 역할
-    interval.current = setInterval(changeHand, 1000);
-
-    return () => { // componentWillUnMount 역할
-      clearInterval(interval.current);
-    }
-  }, [imgCoord]);
+  const [isRunning, setIsRunning] = useState(true);
 
   // interval 되는 코드
   const changeHand = () => {
@@ -38,6 +31,8 @@ const RSP = () => {
     }
   }
 
+  useInterval(changeHand, isRunning ? 1000 : null);
+
   const computerChoice = (imgCoord) => {
     return Object.entries(rspCoords).find(function(v) {
       return v[1] === imgCoord;
@@ -45,25 +40,27 @@ const RSP = () => {
   }
 
   const onClickBtn = (choice) => () => {
-    clearInterval(interval.current);
-    
-    const myScore = scores[choice];
-    const cpuScore = scores[computerChoice(imgCoord)];
-    const diff = myScore - cpuScore;
+    if (isRunning) {
+      setIsRunning(false);
+      
+      const myScore = scores[choice];
+      const cpuScore = scores[computerChoice(imgCoord)];
+      const diff = myScore - cpuScore;
 
-    if (diff === 0) {
-      setResult('비겼습니다');
-    } else if ([-1, 2].includes(diff)) {
-      setResult('이겼습니다');
-      setScore((prevScore) => prevScore + 1);
-    } else {
-      setResult('졌습니다');
-      setScore((prevScore) => prevScore - 1);
+      if (diff === 0) {
+        setResult('비겼습니다');
+      } else if ([-1, 2].includes(diff)) {
+        setResult('이겼습니다');
+        setScore((prevScore) => prevScore + 1);
+      } else {
+        setResult('졌습니다');
+        setScore((prevScore) => prevScore - 1);
+      }
+
+      setTimeout(() => {
+        setIsRunning(true);
+      }, 2000);
     }
-
-    setTimeout(() => {
-      interval.current = setInterval(changeHand, 1000);
-    }, 2000);
   }
 
   return <>
@@ -78,4 +75,4 @@ const RSP = () => {
   </>
 }
 
-module.exports = RSP;
+export default RSP;
