@@ -3,11 +3,18 @@ import Table from "./Table";
 
 const initialState = {
   winner: '',
-  turn: '0',
-  tableData: [['', '', ''], ['', '', ''], ['', '', '']]
+  turn: 'O',
+  tableData: [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ]
 };
 
-const SET_WINNER = 'SET_WINNER';
+// Td 에서 사용해야돼서 export
+export const SET_WINNER = 'SET_WINNER';
+export const CLICK_CELL = 'CLICK_CELL';
+export const CHANGE_TURN = 'CHANGE_TURN';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -15,6 +22,21 @@ const reducer = (state, action) => {
       return {
         ...state,
         winner: action.winner,
+      };
+    case CLICK_CELL: {
+      const tableData = [...state.tableData];
+      tableData[action.row] = [...tableData[action.row]]; // 라이브러리 immer 로 가독성 해결 가능
+      tableData[action.row][action.cell] = state.turn;
+      
+      return {
+        ...state,
+        tableData: tableData
+      }
+    };
+    case CHANGE_TURN:
+      return {
+        ...state,
+        turn: state.turn === 'O' ? 'X' : 'O'
       }
   }
 };
@@ -22,12 +44,8 @@ const reducer = (state, action) => {
 const TicTacToe = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const onClickTable = useCallback(() => { // 자식 컴포넌트에 넘기니까 useCallback 사용
-    dispatch({ type: SET_WINNER, winner: '0' });
-  }, []);
-
   return <>
-    <Table onClick={onClickTable} />
+    <Table tableData={state.tableData} dispatch={dispatch} />
     {state.winner && <div>{state.winner}님의 승리</div>}
   </>
 }
