@@ -2,7 +2,7 @@ import React, { useReducer, createContext, useMemo} from "react";
 import Table from "./Table";
 import Form from "./Form";
 
-const CODE = {
+export const CODE = {
   MINE: -7, // 지뢰
   NORMAL: -1, // 초기상태
   QUESTION: -2, // 물음표
@@ -22,9 +22,36 @@ const initialState = {
   tableData: [],
 };
 
-const plantMine = (row, cell, mine) => {
+const plantMine = (row, cell, mine) => { // 지뢰심기
   console.log(row, cell, mine);
   
+  const candidate = Array(row * cell).fill().map((arr, i) => {
+    return i;
+  });
+
+  const shuffle = [];
+  while (candidate.length >  row * cell - mine) { // 지뢰를 뺀 개수만큼 랜덤돌려서 shuffle[] 만들기
+    const chosen = candidate.splice(Math.floor(Math.random() * candidate.length), 1)[0];
+    shuffle.push(chosen);
+  }
+
+  const data = [];
+  for (let i = 0; i < row; i++) { // 정상 칸 생성
+    const rowData = [];
+    data.push(rowData);
+    for (let j = 0; j < cell; j++) {
+      rowData.push(CODE.NORMAL);
+    }
+  }
+
+  for (let k = 0; k < shuffle.length; k++) { // 지뢰 칸 생성
+    const ver = Math.floor(shuffle[k] / cell);
+    const hor = shuffle[k] % cell;
+    data[ver][hor] = CODE.MINE;
+  }
+
+  console.log(data);
+  return data;
 }
 
 export const START_GAME = 'START_GAME';
