@@ -121,7 +121,7 @@ const reducer = (state, action) => {
     case  NORMALIZE_CELL: { // 정상칸
       const tableData = [...state.tableData];
       tableData[action.row] = [...state.tableData[action.row]];
-      
+
       if (tableData[action.row][action.cell] === CODE.QUESTION_MINE) {
         tableData[action.row][action.cell] = CODE.MINE;  
       } else {
@@ -146,9 +146,7 @@ const MineSearch = () => {
   return <>
     <TableContext.Provider value={value}>
       <Form></Form>
-      {/* <div>{state.timer}</div> */}
       <Table></Table>
-      {/* <div>{state.result}</div> */}
     </TableContext.Provider>
   </>
 }
